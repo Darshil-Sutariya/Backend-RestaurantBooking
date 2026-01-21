@@ -32,6 +32,15 @@ app.use("/api/table", tableRouter);
 app.use('/api/category', categoryRouter);
 app.use("/api/report", reportRouter);
 
-db();
+let isConnected = false;
+async function connectDBOnce() {
+  if (!isConnected) {
+    await db();
+    isConnected = true;
+  }
+}
 
-module.exports = app;
+module.exports = async (req, res) => {
+  await connectDBOnce();
+  return app(req, res);
+};
