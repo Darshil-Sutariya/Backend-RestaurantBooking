@@ -14,7 +14,7 @@ const cors = require('cors');
 dotenv.config();
 const app = express();
 
-const PORT = process.env.PORT;
+// const PORT = process.env.PORT;
 
 app.use(cors({
   // origin: "http://localhost:3000",
@@ -32,8 +32,6 @@ app.use("/api/table", tableRouter);
 app.use('/api/category', categoryRouter);
 app.use("/api/report", reportRouter);
 
-db().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-  });
-});
+db();
+
+module.exports = app;
