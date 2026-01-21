@@ -55,12 +55,17 @@ const Login = async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    return res.send({
-      success: true,
-      message: "User login successfully",
-      token,
-      firstname: checkExistuser.firstname
-    });
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,       // ✅ Vercel required
+        sameSite: "none"    // ✅ Frontend ↔ Backend different domain
+      })
+      .send({
+        success: true,
+        message: "User login successfully",
+        firstname: checkExistuser.firstname
+      });
 
   } catch (error) {
     console.log(error);
@@ -77,7 +82,7 @@ const Signup = async (req, res) => {
 
     const { firstname, middlename, lastname, city, hotelname, address, email, phonenumber, password } = req.body;
 
-    if (!firstname || !middlename || !lastname || !city || !hotelname || !address ||!email || !phonenumber || !password) {
+    if (!firstname || !middlename || !lastname || !city || !hotelname || !address || !email || !phonenumber || !password) {
       return res.send({ message: "pls fill all the details", success: false });
     }
 
@@ -117,8 +122,10 @@ const Signup = async (req, res) => {
       return res.send({ message: "token is not created", success: false })
     }
 
-    return res.cookie("token", token, {
-      httpOnly: true
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none"
     }).send({ message: "user created successfully", success: true })
 
 
@@ -174,7 +181,7 @@ const updateUser = async (req, res) => {
 
     const updateData = {
       ...req.body,
-     updatedBy: req.user.id,
+      updatedBy: req.user.id,
       updatedAt: new Date()
     };
 
