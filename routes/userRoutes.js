@@ -5,10 +5,6 @@ const verifyToken = require('../middleware/authMiddleware.js');
 const route = express.Router();
 
 
-route.get('/', verifyToken, (req, res) => {
- res.status(200).json({ message: 'Protected route accessed' });
- });
-
 
 route.post("/signup", Signup);
 route.post("/login", Login);
