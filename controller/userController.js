@@ -64,6 +64,7 @@ const Login = async (req, res) => {
       .send({
         success: true,
         message: "User login successfully",
+        token,
         firstname: checkExistuser.firstname
       });
 
